@@ -46,11 +46,11 @@ def welcome():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    # Create our session (link) from Python to the DB
+    # Create session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of all passenger names"""
-    # Query all passengers
+    """Return a list of a dicionary for precipitation"""
+    # Query all for precipitation
     results = session.query(measurement.date,measurement.prcp).all()
     prcp_dict={date:prcp for date, prcp in results}
     session.close()
@@ -63,8 +63,8 @@ def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of passenger data including the name, age, and sex of each passenger"""
-    # Query all passengers
+    """Return a list of stations"""
+    # Query all stations
     results = session.query(station.station).all()
 
     session.close()
@@ -76,8 +76,8 @@ def tobs():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of passenger data including the name, age, and sex of each passenger"""
-    # Query all passengers
+    """Return a list of temp observations"""
+    # Query all temp last year of most active station
     last_year = dt.date(2017,8,23)-dt.timedelta(days = 365)
     results = session.query(measurement.tobs).filter(measurement.date >= last_year).filter(measurement.station == "USC00519281").all()
 
@@ -90,8 +90,8 @@ def temperature(start,end):
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of passenger data including the name, age, and sex of each passenger"""
-    # Query all passengers
+    """Return a list of min, max, avg with the ability to enter dates from the api"""
+    # Query all all station data
     results = session.query(func.min(measurement.tobs), func.max(measurement.tobs), func.avg(measurement.tobs)).filter(measurement.date>=start).filter(measurement.date<=end).all()
     session.close()
 
